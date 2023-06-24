@@ -6,11 +6,27 @@ from plotly.subplots import make_subplots
 
 class Plotter:
     def __init__(self, actual, predicted, data):
+        """
+        Initialize Plotter class with actual, predicted values and dataset.
+
+        :param actual: Actual values from the dataset.
+        :param predicted: Predicted values from the model.
+        :param data: Original data frame.
+        """
         self.df = pd.DataFrame({'Actual': actual, 'Predicted': predicted}).sort_index()
         self.df['Percentage Difference'] = ((self.df['Predicted'] - self.df['Actual']) / self.df['Actual']) * 100
         self.data = data
 
     def configure_layout(self, title, xaxis_title, yaxis_title, fig):
+        """
+        Configure the layout of the plot.
+
+        :param title: The title of the plot.
+        :param xaxis_title: The title of the x-axis.
+        :param yaxis_title: The title of the y-axis.
+        :param fig: The figure to which the layout is to be applied.
+        :return: The figure with the updated layout.
+        """
         fig.update_layout(
             title=title,
             xaxis_title=xaxis_title,
@@ -35,6 +51,11 @@ class Plotter:
         return fig
 
     def plot_actual_vs_predicted(self):
+        """
+        Plot the actual versus the predicted values.
+
+        :return: The plotly figure containing the actual and predicted values.
+        """
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=self.df.index, y=self.df['Actual'], mode='lines', name='Actual',
                                  line=dict(color='darkviolet')))
@@ -44,6 +65,11 @@ class Plotter:
         return fig
 
     def plot_percentage_difference(self):
+        """
+        Plot the percentage difference between the actual and predicted values.
+
+        :return: The plotly figure containing the percentage difference.
+        """
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=self.df.index, y=self.df['Percentage Difference'], mode='lines',
                                  name='Percentage Difference', line=dict(color='orangered')))
@@ -51,6 +77,11 @@ class Plotter:
         return fig
 
     def plot_patterns_and_trends(self):
+        """
+        Plot the patterns and trends in the data.
+
+        :return: The plotly figure containing the patterns and trends.
+        """
         # Combine 'Year Sold' and 'Month Sold' into a datetime format
         self.data['Date Sold'] = pd.to_datetime(
             self.data['Year Sold'].astype(str) + '-' + self.data['Month Sold'].astype(str) + '-01')
@@ -64,6 +95,11 @@ class Plotter:
         return fig
 
     def plot_price_by_location(self):
+        """
+        Plot the average sale price by location.
+
+        :return: The plotly figure containing the average sale price by location.
+        """
         avg_price_by_neighborhood = self.data.groupby('Neighborhood')['SalePrice'].mean()
         fig = px.bar(x=avg_price_by_neighborhood.index, y=avg_price_by_neighborhood.values,
                      labels={'x': 'Neighborhood', 'y': 'Average Sale Price'},
@@ -74,6 +110,11 @@ class Plotter:
         return fig
 
     def plot_price_by_location_and_time(self):
+        """
+        Plot the average sale price by location and time.
+
+        :return: The plotly figure containing the average sale price by location and time.
+        """
         # Combine 'Year Sold' and 'Month Sold' into a datetime format
         self.data['Date Sold'] = pd.to_datetime(
             self.data['Year Sold'].astype(str) + '-' + self.data['Month Sold'].astype(str) + '-01')
@@ -87,5 +128,3 @@ class Plotter:
         fig = self.configure_layout("Average Sale Price by Location and Time", "Date", "Average Sale Price", fig)
 
         return fig
-
-

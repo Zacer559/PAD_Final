@@ -1,10 +1,13 @@
 import pandas as pd
 from dash import dash_table
 import plotly.graph_objs as go
+
+
 class Metrics:
     """
     Encapsulates the metrics used in the ModelEvaluator.
     """
+
     def __init__(self, metrics):
         self.metrics = metrics
         self.names = ["train_mse", "val_mse", "train_r2", "val_r2",
@@ -20,13 +23,11 @@ class Metrics:
         return pd.DataFrame(metrics_dict, index=[0])
 
 
-
-
-
 class ModelEvaluator:
     """
     Evaluates a model and presents its metrics.
     """
+
     def __init__(self, model_metrics):
         self.model_metrics = Metrics(model_metrics)
 
